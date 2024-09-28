@@ -196,3 +196,95 @@ Sat Sep 28 16:18:46 -03 2024
 > kubectl get pods -A
 NAMESPACE     NAME                               READY   STATUS             RESTARTS         AGE
 default       broken-pod                         1/1     Running            0                8m31s
+
+
+
+
+
+
+
+
+# K8sGPT Lab - Using K8sGPT to Troubleshoot a Cluster
+
+K8sGPT Lab - Using K8sGPT to Troubleshoot a Cluster
+
+Welcome to the K8sGPT Lab! In this lab, you'll explore how K8sGPT can help you analyze and troubleshoot Kubernetes clusters, focusing on a problematic NGINX deployment.
+
+Prerequisites:
+
+    Access to a Kubernetes cluster
+    kubectl installed and configured
+    K8sGPT installed
+    Your own OpenAI API key (instructions on how to obtain one are provided by your instructor)
+
+
+
+### Step 1: Authenticate K8sGPT
+
+    Add your OpenAI API key to K8sGPT using k8sgpt auth add command.
+    When prompted, enter your OpenAI API key. This key will be securely stored for use with K8sGPT.
+    If successful, you should see a confirmation message.
+
+
+Is OpenAI API key added?
+
+controlplane ~ ➜  k8sgpt auth add
+Warning: backend input is empty, will use the default value: openai
+Warning: model input is empty, will use the default value: gpt-3.5-turbo
+Enter openai Key: openai added to the AI backend provider list
+
+controlplane ~ ➜  
+
+
+
+
+> k8sgpt analyze --explain
+   0% |                                                                                                     | (0/1, 0 it/hr) [0s:0s]
+Error: exhausted API quota for AI provider openai: error, status code: 429, message: You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+
+
+
+
+Google Gemini
+
+Google Gemini allows generative AI capabilities with multimodal approach (it is capable to understand not only text, but also code, audio, image and video). With Gemini models, a new API was introduced, and this is what is now built-in K8sGPT. This API also works against the Google Cloud Vertex AI service. See also Google AI Studio to get started.
+
+    NOTE: Gemini API might be still rolling to some regions. See the available regions for details.
+
+    To use Google Gemini API in K8sGPT, obtain the API key.
+    To configure Google backend in K8sGPT with gemini-pro model (see all models here) use auth command: bash k8sgpt auth add --backend googlevertexai --model gemini-pro --password "<Your API KEY>"
+    Run the following command to analyze issues within your cluster with the Google provider: bash k8sgpt analyze --explain --backend google
+
+
+
+bash k8sgpt auth add --backend googlevertexai --model gemini-pro --password "<Your API KEY>"
+
+bash k8sgpt auth add --backend googlevertexai --model gemini-pro --password "<Your API KEY>"
+
+k8sgpt analyze --explain --backend google
+
+
+> k8sgpt auth add --backend googlevertexai --model gemini-pro --password  
+Error: Backend AI accepted values are 'openai, localai, azureopenai, noopai, cohere, amazonbedrock, amazonsagemaker'
+
+ ~/cursos/k8sgpt  main !1    
+
+
+
+
+
+curl -LO https://github.com/k8sgpt-ai/k8sgpt/releases/download/v0.3.41/k8sgpt_amd64.deb
+sudo dpkg -i k8sgpt_amd64.deb
+
+
+> k8sgpt auth add --backend --help
+Error: Backend AI accepted values are 'openai, localai, ollama, azureopenai, cohere, amazonbedrock, amazonsagemaker, google, noopai, huggingface, googlevertexai, oci, watsonxai'
+>
+
+
+
+
+
+## PENDENTE
+- Retomar após cessar bloqueio da cota do Openai.
+- Ou, usar LocalAI ou outra AI.
