@@ -587,3 +587,181 @@ tcp   LISTEN 0      4096       127.0.0.1:11434       0.0.0.0:*    users:(("ollam
 tcp   LISTEN 0      5          127.0.0.1:39601       0.0.0.0:*    users:(("ollama_llama_se",pid=2241,fd=3))
 
  ~                
+
+
+
+
+
+<https://www.kubelynx.com/article/k8sgpt-troubleshoot-debug-kubernetes-cluster-with-openai-ollama>
+With my VM's configuration setting of 8GB RAM and 4 CPUs, it took around 70 seconds to start.
+
+Set up the Ollama REST API as the back-end service for K8sGPT. Choose the backend category as localai, which works well with the OpenAI API, but the real provider in operation will be Ollama with Llama 3.
+
+~~~~bash
+$ k8sgpt auth add --backend localai --model llama3 --baseurl http://localhost:11434/v1
+~~~~
+
+Make it a default provider.
+
+~~~~bash
+$ k8sgpt auth default --provider localai
+~~~~
+
+K8sGPT add default authentication
+
+
+This completes the setup needed to use Ollama as a backend for K8sGPT.
+
+
+
+k8sgpt auth add --backend localai --model mistral --baseurl http://localhost:11434/v1
+
+
+
+
+- ERRO
+
+
+> k8sgpt analyze --explain
+   0% |                                                                                                                    | (0/2, 0 it/hr) [0s:0s]
+Error: failed while calling AI provider localai: error, status code: 404, message: model "llama3" not found, try pulling it first
+> k8sgpt auth list
+Default:
+> localai
+Active:
+> openai
+> localai
+> googlevertexai
+Unused:
+> ollama
+> azureopenai
+> cohere
+> amazonbedrock
+> amazonsagemaker
+> google
+> noopai
+> huggingface
+> oci
+> watsonxai
+
+
+
+- Verificando detalhes:
+
+> k8sgpt auth list --details
+Default:
+> localai
+Active:
+> openai
+   - Model: gpt-3.5-turbo
+> localai
+   - Model: llama3
+   - BaseURL: http://localhost:11434/v1
+> googlevertexai
+   - Model: gemini-pro
+Unused:
+> ollama
+> azureopenai
+> cohere
+> amazonbedrock
+> amazonsagemaker
+> google
+> noopai
+> huggingface
+> oci
+> watsonxai
+
+ ~                          
+
+
+- Ajustado
+> vi /home/fernando/.config/k8sgpt/k8sgpt.yaml
+
+
+18:12h
+18:13h
+
+
+- Testando
+
+OK
+
+Trouxe detalhes sobre como tratar erros:
+
+~~~~bash
+> k8sgpt analyze --explain
+ 100% |██████████████████████████████████████████████████████████████████████████████████████████████████████████████████| (2/2, 8 it/min)
+AI Provider: localai
+
+0: Node wsl2()
+- Error: wsl2 has condition of type Ready, reason KubeletNotReady: container runtime status check may not have completed yet
+ Error: The Kubernetes node (WSL2) is not ready due to the container runtime status check not being completed yet.
+   Solution:
+   1. Check if the Docker daemon is running on WSL2: `docker ps` or `systemctl status docker`. If it's not running, start it using `sudo systemctl start docker` or `docker start`.
+   2. Verify that the container runtime is configured correctly in Kubernetes: `kubectl get csr`. Make sure the signing-contrroller and kubelet-serving are approved.
+   3. If the above steps don't work, try restarting the kubelet service: `sudo systemctl restart kubelet`.
+   4. Lastly, ensure that the Kubernetes cluster is functioning properly by checking its status with `kubectl get nodes` and verifying that the node (WSL2) is ready. If it's not, try updating the kubelet configuration file to automatically repair taints: `sudo nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf` and add or update the following lines:
+   ```
+   Environment="KUBELET_CONFIG_CHOKER=0"
+   Environment="KUBELET_SYSTEMINODENI_WATCHDOG=15m"
+   Environment="KUBELET_CADVISOR_START_TIME=1h"
+   ```
+   Save the file and restart the kubelet service: `sudo systemctl daemon-reload` followed by `sudo systemctl restart kubelet`.
+1: Pod default/broken-pod()
+- Error: the last termination reason is Completed container=broken-pod pod=broken-pod
+ Error: The container within the pod named 'broken-pod' has terminated with a status of Completed, indicating that it may have encountered an issue.
+   Solution: 1. Check the logs of the container using `kubectl logs broken-pod -c broken-container` to identify the error.
+           2. If the error is not apparent from the logs, check the Pod's status using `kubectl get pods`. Look for any warning or error messages related to the container.
+           3. If the issue persists, consider resolving the problem at its root cause. This could involve modifying the Docker image used in the container, adjusting resource limits, or updating the application code.
+           4. After making changes, recreate the pod using `kubectl create -f <file-containing-pod-definition>`. Monitor the new pod to ensure that the issue has been resolved.
+
+
+ ~      
+
+
+> k8sgpt analyze --explain --filter=Pod
+ 100% |██████████████████████████████████████████████████████████████████████████████████████████████████████████████████| (1/1, 3467 it/s)
+AI Provider: localai
+
+0: Pod default/broken-pod()
+- Error: the last termination reason is Completed container=broken-pod pod=broken-pod
+ Error: The container within the pod named 'broken-pod' has terminated with a status of Completed, indicating that it may have encountered an issue.
+   Solution: 1. Check the logs of the container using `kubectl logs broken-pod -c broken-container` to identify the error.
+           2. If the error is not apparent from the logs, check the Pod's status using `kubectl get pods`. Look for any warning or error messages related to the container.
+           3. If the issue persists, consider resolving the problem at its root cause. This could involve modifying the Docker image used in the container, adjusting resource limits, or updating the application code.
+           4. After making changes, recreate the pod using `kubectl create -f <file-containing-pod-definition>`. Monitor the new pod to ensure that the issue has been resolved.
+
+~~~~
+
+
+
+
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+# Principais materiais
+
+- Getting started:
+<https://docs.k8sgpt.ai/getting-started/getting-started/>
+
+- Como instalar Ollama:
+<https://medium.aiplanet.com/implementing-rag-using-langchain-ollama-and-chainlit-on-windows-using-wsl-92d14472f15d>
+como instalar no linux:
+<https://github.com/ollama/ollama/blob/main/docs/linux.md>
+obs: No meu caso uso NVIDIA, se fosse GPU da AMD, precisa instalar itens adicionais.
+
+- Como setar o Ollama no k8sgpt, etc:
+<https://www.kubelynx.com/article/k8sgpt-troubleshoot-debug-kubernetes-cluster-with-openai-ollama>
+
+
+k8sgpt analyze --explain
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+# PENDENTE
+
+- Retomar Lab da KodeKloud.
