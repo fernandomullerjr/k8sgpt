@@ -11,6 +11,15 @@ git commit -m "Lab de k8sgpt"
 git push
 git status
 
+
+
+
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+
 # Welcome
 
 Welcome to the K8sGPT Lab! In this lab, you'll explore how K8sGPT can help you analyze and troubleshoot Kubernetes clusters, focusing on a problematic NGINX deployment.
@@ -498,5 +507,83 @@ zsh: command not found: ollama
 
 
 
-curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz
+
+
+
+<https://github.com/ollama/ollama/blob/main/docs/linux.md>
+
+sudo curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz
 sudo tar -C /usr -xzf ollama-linux-amd64.tgz
+
+Start Ollama:
+
+ollama serve
+
+In another terminal, verify that Ollama is running:
+
+ollama -v
+
+AMD GPU install
+
+If you have an AMD GPU, also download and extract the additional ROCm package:
+
+sudo curl -L https://ollama.com/download/ollama-linux-amd64-rocm.tgz -o ollama-linux-amd64-rocm.tgz
+sudo tar -C /usr -xzf ollama-linux-amd64-rocm.tgz
+
+
+
+
+
+> sudo tar -C /usr -xzf ollama-linux-amd64.tgz
+> ollama serve
+Couldn't find '/home/fernando/.ollama/id_ed25519'. Generating new private key.
+Your new public key is:
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMtoS9HvAeVQKD2i5GWbFOqM0HY2BcZXcwUCdtiAHGxz
+
+2024/10/19 17:50:27 routes.go:1158: INFO server config env="map[CUDA_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_DEBUG:false OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://127.0.0.1:11434 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/fernando/.ollama/models OLLAMA_MULTIUSER_CACHE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:0 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://*] OLLAMA_SCHED_SPREAD:false OLLAMA_TMPDIR: ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2024-10-19T17:50:27.085-03:00 level=INFO source=images.go:754 msg="total blobs: 0"
+time=2024-10-19T17:50:27.086-03:00 level=INFO source=images.go:761 msg="total unused blobs removed: 0"
+time=2024-10-19T17:50:27.086-03:00 level=INFO source=routes.go:1205 msg="Listening on 127.0.0.1:11434 (version 0.3.13)"
+time=2024-10-19T17:50:27.086-03:00 level=INFO source=common.go:135 msg="extracting embedded files" dir=/tmp/ollama4196636287/runners
+time=2024-10-19T17:50:34.524-03:00 level=INFO source=common.go:49 msg="Dynamic LLM libraries" runners="[cuda_v12 rocm_v60102 cpu cpu_avx cpu_avx2 cuda_v11]"
+time=2024-10-19T17:50:34.524-03:00 level=INFO source=gpu.go:199 msg="looking for compatible GPUs"
+time=2024-10-19T17:50:36.220-03:00 level=INFO source=types.go:107 msg="inference compute" id=GPU-3afa55e0-67e2-a34e-d60d-2b69b20be42f library=cuda variant=v12 compute=8.9 driver=12.6 name="NVIDIA GeForce RTX 4060" total="8.0 GiB" available="6.9 GiB"
+[GIN] 2024/10/19 - 17:51:05 | 200 |      37.791µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2024/10/19 - 17:51:05 | 404 |     139.022µs |       127.0.0.1 | POST     "/api/show"
+time=2024-10-19T17:51:07.778-03:00 level=INFO source=download.go:175 msg="downloading ff82381e2bea in 16 257 MB part(s)"
+
+
+> ollama run mistral
+pulling manifest
+pulling ff82381e2bea...   1% ▕                                                                                    ▏  32 MB/4.1 GB  6.8 MB/s   9m57s 
+
+
+> ollama run mistral
+pulling manifest
+pulling ff82381e2bea... 100% ▕████████████████████████████████████████████████████████████████████████████████████▏ 4.1 GB
+pulling 43070e2d4e53... 100% ▕████████████████████████████████████████████████████████████████████████████████████▏  11 KB
+pulling 491dfa501e59... 100% ▕████████████████████████████████████████████████████████████████████████████████████▏  801 B
+pulling ed11eda7790d... 100% ▕████████████████████████████████████████████████████████████████████████████████████▏   30 B
+pulling 42347cd80dc8... 100% ▕████████████████████████████████████████████████████████████████████████████████████▏  485 B
+verifying sha256 digest
+writing manifest
+success
+>>> como efetuar instalacao do kubeadm
+ Para realizar a instalação do `kubeadm`, você deverá seguir estas etapas:
+
+1. **Atualize o sistema operacional**: Antes de começar, atualize seu sistema para garantir que as versões mais recentes dos pacotes estejam
+instalados. No Ubuntu, você pode usar o comando `sudo apt-get update`.
+
+2. **Instale as dependências**: Para instalar `kubeadm`, também serão necessários outros pacotes. Para isso, execute:
+
+   ```
+   sudo apt-get install -y apt-transport-https curl
+   ```
+
+
+> ss -tulp | grep ollama
+tcp   LISTEN 0      4096       127.0.0.1:11434       0.0.0.0:*    users:(("ollama",pid=72111,fd=3))
+tcp   LISTEN 0      5          127.0.0.1:39601       0.0.0.0:*    users:(("ollama_llama_se",pid=2241,fd=3))
+
+ ~                
