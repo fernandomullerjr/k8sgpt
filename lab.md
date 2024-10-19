@@ -384,6 +384,8 @@ Sat Oct 19 17:05:52 -03 2024
 
 
 - Testando
+k8sgpt analyze
+k8sgpt analyse --explain
 
 ~~~~bash
 > k8sgpt analyze
@@ -396,5 +398,105 @@ AI Provider: AI not used; --explain not set
 - Error: the last termination reason is Completed container=broken-pod pod=broken-pod
 
 
+> k8sgpt analyse --explain
+   0% |                                                                                                                    | (0/2, 0 it/hr) [0s:0s]
+Error: exhausted API quota for AI provider openai: error, status code: 429, message: You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+
 
 ~~~~
+
+
+
+
+k8sgpt auth list
+
+
+>
+> k8sgpt auth list
+Default:
+> openai
+Active:
+> openai
+> googlevertexai
+Unused:
+> localai
+> ollama
+> azureopenai
+> cohere
+> amazonbedrock
+> amazonsagemaker
+> google
+> noopai
+> huggingface
+> oci
+> watsonxai
+
+
+
+
+
+
+
+
+
+
+
+<https://www.kubelynx.com/article/k8sgpt-troubleshoot-debug-kubernetes-cluster-with-openai-ollama>
+
+
+<https://medium.com/@Tanzim/how-to-run-ollama-in-windows-via-wsl-8ace765cee12>
+
+4. Update Packages:
+
+Launch the Ubuntu distribution as an administrator and update the packages by running:
+
+sudo apt update && sudo apt upgrade
+
+
+
+5. Install Ollama: Now, it’s time to install Ollama! Execute the following command to download and install Ollama on your Linux environment: (Download Ollama on Linux)
+
+curl https://ollama.ai/install.sh | sh
+
+This process may take a couple of minutes as it downloads and sets up Ollama along with its dependencies.
+
+6. Ready to Run Models: Congratulations! You’ve successfully installed Ollama on your WSL environment. You’re now ready to download and run any model of your choice. Check out the list of supported models available in the Ollama library at library (ollama.ai)
+
+ollama run mistral
+
+Replace mistral with the name of the model i.e llama2 llama2, phi, openhermes, codellama, llava, dolphinyou wish to run from the available options.
+
+By following these steps, you’ve seamlessly integrated Ollama into your WSL environment, empowering you to explore various machine learning models effortlessly. Happy prompting!
+
+
+
+
+
+
+====================================================================================================================================================
+ Upgrading
+====================================================================================================================================================
+  Package:                                         Old Version:                     New Version:                                             Size:
+  ansible                                          9.10.0-1ppa~jammy                10.5.0-1ppa~jammy                                      17.4 MB
+  ansible-core                                     2.16.11-1ppa~jammy               2.17.5-1ppa~jammy                                       1.0 MB
+  helm                                             3.16.1-1                         3.16.2-1                                               17.3 MB
+  snapd                                            2.63+22.04ubuntu0.1              2.65.3+22.04                                           26.4 MB
+  ubuntu-minimal                                   1.481.3                          1.481.4                                                   3 KB
+  ubuntu-standard                                  1.481.3                          1.481.4                                                   3 KB
+  ubuntu-wsl                                       1.481.3                          1.481.4                                                   3 KB
+  wsl-setup                                        0.2                              0.5.4~22.04                                               4 KB
+
+
+
+
+
+
+
+
+> ollama run mistral
+zsh: command not found: ollama
+
+
+
+curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz
+sudo tar -C /usr -xzf ollama-linux-amd64.tgz
