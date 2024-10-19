@@ -1,3 +1,18 @@
+
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+
+git status
+git add .
+git commit -m "Lab de k8sgpt"
+git push
+git status
+
+# Welcome
+
 Welcome to the K8sGPT Lab! In this lab, you'll explore how K8sGPT can help you analyze and troubleshoot Kubernetes clusters, focusing on a problematic NGINX deployment.
 
 Prerequisites:
@@ -288,3 +303,98 @@ Error: Backend AI accepted values are 'openai, localai, ollama, azureopenai, coh
 ## PENDENTE
 - Retomar após cessar bloqueio da cota do Openai.
 - Ou, usar LocalAI ou outra AI.
+
+
+
+
+
+
+
+
+
+
+
+~~~~bash
+> journalctl -xeu kubelet
+Oct 19 16:50:32 wsl2 kubelet[17109]: I1019 16:50:32.691887   17109 status_manager.go:217] "Starting to sync pod status >
+Oct 19 16:50:32 wsl2 kubelet[17109]: I1019 16:50:32.691897   17109 kubelet.go:2347] "Starting kubelet main sync loop"
+Oct 19 16:50:32 wsl2 kubelet[17109]: E1019 16:50:32.691925   17109 kubelet.go:2371] "Skipping pod synchronization" err=>
+Oct 19 16:50:32 wsl2 kubelet[17109]: W1019 16:50:32.692179   17109 reflector.go:539] k8s.io/client-go@v0.0.0/tools/cach>
+Oct 19 16:50:32 wsl2 kubelet[17109]: E1019 16:50:32.692230   17109 reflector.go:147] k8s.io/client-go@v0.0.0/tools/cach>
+Oct 19 16:50:32 wsl2 kubelet[17109]: I1019 16:50:32.702091   17109 cpu_manager.go:214] "Starting CPU manager" policy="n>
+Oct 19 16:50:32 wsl2 kubelet[17109]: I1019 16:50:32.702112   17109 cpu_manager.go:215] "Reconciling" reconcilePeriod="1>
+Oct 19 16:50:32 wsl2 kubelet[17109]: I1019 16:50:32.702121   17109 state_mem.go:36] "Initialized new in-memory state st>
+Oct 19 16:50:32 wsl2 kubelet[17109]: I1019 16:50:32.702186   17109 state_mem.go:88] "Updated default CPUSet" cpuSet=""
+Oct 19 16:50:32 wsl2 kubelet[17109]: I1019 16:50:32.702196   17109 state_mem.go:96] "Updated CPUSet assignments" assign>
+Oct 19 16:50:32 wsl2 kubelet[17109]: I1019 16:50:32.702201   17109 policy_none.go:49] "None policy: Start"
+Oct 19 16:50:32 wsl2 kubelet[17109]: I1019 16:50:32.702980   17109 memory_manager.go:170] "Starting memorymanager" poli>
+Oct 19 16:50:32 wsl2 kubelet[17109]: I1019 16:50:32.703002   17109 state_mem.go:35] "Initializing new in-memory state s>
+Oct 19 16:50:32 wsl2 kubelet[17109]: I1019 16:50:32.703084   17109 state_mem.go:75] "Updated machine memory state"
+Oct 19 16:50:32 wsl2 kubelet[17109]: E1019 16:50:32.703246   17109 kubelet.go:1550] "Failed to start ContainerManager" >
+Oct 19 16:50:32 wsl2 systemd[1]: kubelet.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░
+░░ An ExecStart= process belonging to unit kubelet.service has exited.
+░░
+░░ The process' exit code is 'exited' and its exit status is 1.
+Oct 19 16:50:32 wsl2 systemd[1]: kubelet.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░
+░░ The unit kubelet.service has entered the 'failed' state with result 'exit-code'.
+~~~~
+
+
+- Efetuado reboot do WSL.
+
+- Iniciado kubeadm init novamente.
+
+OK
+Agora subiu k8s
+
+~~~~bash
+
+> kubectl get node -o wide
+NAME   STATUS   ROLES           AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION                       CONTAINER-RUNTIME
+wsl2   Ready    control-plane   27d   v1.29.9   192.168.0.104   <none>        Ubuntu 22.04.5 LTS   5.15.153.1-microsoft-standard-WSL2   containerd://1.7.22
+> kubectl get pods -A
+NAMESPACE     NAME                               READY   STATUS             RESTARTS        AGE
+default       broken-pod                         0/1     CrashLoopBackOff   317 (71s ago)   21d
+kube-system   cilium-dwjdr                       1/1     Running            13 (29m ago)    27d
+kube-system   cilium-envoy-skd5w                 1/1     Running            13 (29m ago)    27d
+kube-system   cilium-operator-684498dfc4-dxmq6   1/1     Running            14 (29m ago)    27d
+kube-system   coredns-76f75df574-886g5           1/1     Running            9 (6d5h ago)    21d
+kube-system   coredns-76f75df574-mrkcx           1/1     Running            9 (6d5h ago)    21d
+kube-system   etcd-wsl2                          1/1     Running            14 (29m ago)    27d
+kube-system   hubble-relay-6ccc94856b-ntrvf      1/1     Running            24 (6d5h ago)   27d
+kube-system   hubble-ui-647f4487ff-m7l78         2/2     Running            24 (6d5h ago)   27d
+kube-system   kube-apiserver-wsl2                1/1     Running            13 (29m ago)    27d
+kube-system   kube-controller-manager-wsl2       1/1     Running            37 (29m ago)    27d
+kube-system   kube-proxy-5t5dt                   1/1     Running            10 (29m ago)    21d
+kube-system   kube-scheduler-wsl2                1/1     Running            36 (29m ago)    27d
+> date
+Sat Oct 19 17:05:52 -03 2024
+
+ ~/kubeadm-wsl2/src/k8s-cri-dockerd  main:master >1 ?1             
+~~~~
+
+
+
+- Testando
+
+~~~~bash
+> k8sgpt analyze
+AI Provider: AI not used; --explain not set
+
+0: Node wsl2()
+- Error: wsl2 has condition of type Ready, reason KubeletNotReady: container runtime status check may not have completed yet
+
+1: Pod default/broken-pod()
+- Error: the last termination reason is Completed container=broken-pod pod=broken-pod
+
+
+
+~~~~
