@@ -731,6 +731,32 @@ AI Provider: localai
            3. If the issue persists, consider resolving the problem at its root cause. This could involve modifying the Docker image used in the container, adjusting resource limits, or updating the application code.
            4. After making changes, recreate the pod using `kubectl create -f <file-containing-pod-definition>`. Monitor the new pod to ensure that the issue has been resolved.
 
+
+
+
+>
+> k8sgpt analyze --explain --filter=Pod --output=json
+{
+  "provider": "localai",
+  "errors": null,
+  "status": "ProblemDetected",
+  "problems": 1,
+  "results": [
+    {
+      "kind": "Pod",
+      "name": "default/broken-pod",
+      "error": [
+        {
+          "Text": "the last termination reason is Completed container=broken-pod pod=broken-pod",
+          "KubernetesDoc": "",
+          "Sensitive": []
+        }
+      ],
+      "details": " Error: The container within the pod named 'broken-pod' has terminated with a status of Completed, indicating that it may have encountered an issue.\n   Solution: 1. Check the logs of the container using `kubectl logs broken-pod -c broken-container` to identify the error.\n           2. If the error is not apparent from the logs, check the Pod's status using `kubectl get pods`. Look for any warning or error messages related to the container.\n           3. If the issue persists, consider resolving the problem at its root cause. This could involve modifying the Docker image used in the container, adjusting resource limits, or updating the application code.\n           4. After making changes, recreate the pod using `kubectl create -f \u003cfile-containing-pod-definition\u003e`. Monitor the new pod to ensure that the issue has been resolved.",
+      "parentObject": ""
+    }
+  ]
+}
 ~~~~
 
 
@@ -756,7 +782,31 @@ obs: No meu caso uso NVIDIA, se fosse GPU da AMD, precisa instalar itens adicion
 <https://www.kubelynx.com/article/k8sgpt-troubleshoot-debug-kubernetes-cluster-with-openai-ollama>
 
 
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+# COMANDOS
+
+- RESUMO, subindo Ollama e configurando k8sgpt para usar o Ollama:
+ollama serve
+ollama run mistral
+k8sgpt auth add --backend localai --model mistral --baseurl http://localhost:11434/v1
+k8sgpt auth default --provider localai
+OBS: se for necessário ajustar o Modelo, é necessário editar o arquivo da conf do k8sgpt:
+vi /home/fernando/.config/k8sgpt/k8sgpt.yaml
+
+- Analisar problemas do Kubernetes e fazer a IA explicar a causa/solução:
 k8sgpt analyze --explain
+
+- Filtrando apenas por 1 tipo de recurso:
+k8sgpt analyze --explain --filter=Pod
+
+- Trazendo o resultado num JSON:
+k8sgpt analyze --explain --filter=Pod --output=json
+
+
 ### ###################################################################################################################################################
 ### ###################################################################################################################################################
 ### ###################################################################################################################################################
@@ -765,3 +815,9 @@ k8sgpt analyze --explain
 # PENDENTE
 
 - Retomar Lab da KodeKloud.
+
+- Video do Veronez
+<https://www.youtube.com/watch?v=WOoSXd_n_hU>
+
+- Integração com Slack
+<https://docs.k8sgpt.ai/tutorials/slack-integration/>
