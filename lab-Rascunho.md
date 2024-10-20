@@ -762,6 +762,45 @@ AI Provider: localai
 
 
 
+
+
+- TSHOOT com base no k8sgpt:
+node zoado
+
+~~~~bash
+
+> kubectl get node
+NAME   STATUS   ROLES           AGE   VERSION
+wsl2   Ready    control-plane   29d   v1.29.9
+>
+>
+> kubectl get node
+NAME   STATUS     ROLES           AGE   VERSION
+wsl2   NotReady   control-plane   29d   v1.29.9
+> date
+Sun Oct 20 20:24:00 -03 2024
+
+
+> k8sgpt analyze --explain
+ 100% |██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| (1/1, 5 it/min)
+AI Provider: localai
+
+0: Node wsl2()
+- Error: wsl2 has condition of type Ready, reason KubeletNotReady: [container runtime status check may not have completed yet, PLEG is not healthy: pleg has yet to be successful]
+ Error: The Kubernetes node (WSL2) is not ready due to an unhealthy container runtime (Kubelet). The issue might be related to the Container Runtime Status Check not completing yet, or PLEG (Pod sandbox live migration engine) not being healthy.
+
+   Solution:
+   1. Verify that Docker Desktop is installed and running on WSL2 if using it as the container runtime. If not, install and start Docker Desktop.
+   2. Check if the Docker service is running in WSL2 by executing `sudo systemctl status docker`. If it's not running, restart the service with `sudo systemctl start docker`.
+   3. Ensure that the Kubernetes daemonset for kubelet is deployed and running correctly: `kubectl get pods -n kube-system | grep kubelet`. If there are any issues, try to delete and recreate the kubelet pod with `kubectl delete -f /etc/kubernetes/manifests/kubelet.yaml` followed by `kubectl apply -f /etc/kubernetes/manifests/kubelet.yaml`.
+   4. If PLEG is not healthy, try to restart the Kubernetes control plane component responsible for live migration: `sudo systemctl restart kube-apiserver`.
+   5. After making these changes, wait a few minutes and check if the node status has changed with `kubectl get nodes`. If the issue persists, consider checking the logs of the affected components for more information on the problem.
+
+~~~~
+
+
+
+
 ### ###################################################################################################################################################
 ### ###################################################################################################################################################
 ### ###################################################################################################################################################
@@ -821,3 +860,6 @@ k8sgpt analyze --explain --filter=Pod --output=json
 
 - Integração com Slack
 <https://docs.k8sgpt.ai/tutorials/slack-integration/>
+
+
+
