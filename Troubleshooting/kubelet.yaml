@@ -1,0 +1,35 @@
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+address: 0.0.0.0
+clusterDNS:
+- 10.96.0.10
+clusterDomain: cluster.local
+authentication:
+  x509:
+    clientCAFile: "/etc/kubernetes/pki/ca.crt"
+authorization:
+  mode: AlwaysAllow
+cgroupDriver: systemd
+cpuManagerReconcilePeriod: 10s
+evictionHard:
+  memory.available: "100Mi"
+  nodefs.available: "10%"
+  nodefs.inodesFree: "5%"
+hairpinMode: promiscuous-bridge
+healthzBindAddress: 127.0.0.1
+healthzPort: 10248
+httpCheckFrequency: 20s
+imageMinimumGCAge: 2m
+kind: KubeletConfiguration
+loggingDriver: json-file
+makeIPTablesUtilChains: true
+maxOpenFiles: 1000000
+maxPods: 110
+nodeStatusUpdateFrequency: 10s
+registerNode: true
+resolvConf: /etc/resolv.conf
+rotateCertificates: true
+runtimeRequestTimeout: 15m
+staticPodPath: /etc/kubernetes/manifests
+streamSerializer: json
+syncFrequency: 1m
