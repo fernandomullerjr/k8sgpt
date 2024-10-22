@@ -841,9 +841,14 @@ k8sgpt analyze --explain
 
 - Filtrando apenas por 1 tipo de recurso:
 k8sgpt analyze --explain --filter=Pod
+k8sgpt analyze --explain --filter=Service
+k8sgpt analyze --explain --filter=Deployment
 
 - Trazendo o resultado num JSON:
 k8sgpt analyze --explain --filter=Pod --output=json
+
+- Ocultar informações sensíveis:
+k8sgpt analyze --explain --namespace k8sgpt --output=json --anonymize
 
 
 ### ###################################################################################################################################################
