@@ -853,6 +853,7 @@ k8sgpt analyze --explain --filter=Pod --output=json
 ### ###################################################################################################################################################
 # PENDENTE
 
+- TSHOOT do Kubelet.
 - Retomar Lab da KodeKloud.
 
 - Video do Veronez

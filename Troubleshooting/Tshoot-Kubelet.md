@@ -683,3 +683,66 @@ Could you try these steps and share:
 3. Any new errors from `journalctl -u kubelet -n 50`
 
 This should help us identify and fix the cgroup configuration issue that's preventing the container manager from starting properly.
+
+
+
+
+
+
+
+### Dia 21/10/2024
+
+- Iniciando o WSL2 e Docker novamente, node já estava ok:
+
+
+> kubectl get node
+NAME   STATUS   ROLES           AGE   VERSION
+wsl2   Ready    control-plane   30d   v1.29.9
+> kubectl get node -w
+NAME   STATUS   ROLES           AGE   VERSION
+wsl2   Ready    control-plane   30d   v1.29.9
+^C%
+> date
+Mon Oct 21 21:05:43 -03 2024
+
+~~~~bash
+
+> systemctl status kubelet
+● kubelet.service - kubelet: The Kubernetes Node Agent
+     Loaded: loaded (/lib/systemd/system/kubelet.service; enabled; vendor preset: enabled)
+    Drop-In: /usr/lib/systemd/system/kubelet.service.d
+             └─10-kubeadm.conf
+     Active: active (running) since Mon 2024-10-21 21:02:42 -03; 3min 36s ago
+       Docs: https://kubernetes.io/docs/
+   Main PID: 1635 (kubelet)
+      Tasks: 24 (limit: 14999)
+     Memory: 139.1M
+     CGroup: /system.slice/kubelet.service
+             └─1635 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/ku>
+
+Oct 21 21:04:55 wsl2 kubelet[1635]: E1021 21:04:55.896439    1635 pod_workers.go:1298] "Error syncing pod, skipping" er>
+Oct 21 21:05:10 wsl2 kubelet[1635]: I1021 21:05:10.896998    1635 scope.go:117] "RemoveContainer" containerID="4982e85e>
+Oct 21 21:05:10 wsl2 kubelet[1635]: E1021 21:05:10.897172    1635 pod_workers.go:1298] "Error syncing pod, skipping" er>
+Oct 21 21:05:24 wsl2 kubelet[1635]: I1021 21:05:24.902605    1635 scope.go:117] "RemoveContainer" containerID="4982e85e>
+Oct 21 21:05:24 wsl2 kubelet[1635]: E1021 21:05:24.903023    1635 pod_workers.go:1298] "Error syncing pod, skipping" er>
+Oct 21 21:05:39 wsl2 kubelet[1635]: I1021 21:05:39.903511    1635 scope.go:117] "RemoveContainer" containerID="4982e85e>
+Oct 21 21:05:39 wsl2 kubelet[1635]: E1021 21:05:39.903687    1635 pod_workers.go:1298] "Error syncing pod, skipping" er>
+Oct 21 21:05:54 wsl2 kubelet[1635]: I1021 21:05:54.899372    1635 scope.go:117] "RemoveContainer" containerID="4982e85e>
+Oct 21 21:05:54 wsl2 kubelet[1635]: E1021 21:05:54.899540    1635 pod_workers.go:1298] "Error syncing pod, skipping" er>
+Oct 21 21:06:08 wsl2 kubelet[1635]: I1021 21:06:08.900626    1635 scope.go:117] "RemoveContainer" containerID="4982e85e>
+
+~~~~
+
+
+
+
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+### ###################################################################################################################################################
+# PENDENTE
+
+- TSHOOT do Kubelet:
+`journalctl -u kubelet -n 50`
+kubelet.go Failed to start ContainerManager err= system validation failed - wrong number of fields (expected 6, got 7
