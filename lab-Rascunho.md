@@ -858,9 +858,11 @@ k8sgpt analyze --explain --namespace k8sgpt --output=json --anonymize
 ### ###################################################################################################################################################
 # PENDENTE
 
+OK
 - TSHOOT do Kubelet.
 - Retomar Lab da KodeKloud.
 
+PENDENTE
 - Video do Veronez
 <https://www.youtube.com/watch?v=WOoSXd_n_hU>
 
