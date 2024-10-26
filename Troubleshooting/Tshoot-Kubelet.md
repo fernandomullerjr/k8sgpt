@@ -692,8 +692,16 @@ This should help us identify and fix the cgroup configuration issue that's preve
 
 ### Dia 21/10/2024
 
+
+- TSHOOT do Kubelet:
+`journalctl -u kubelet -n 50`
+kubelet.go Failed to start ContainerManager err= system validation failed - wrong number of fields (expected 6, got 7
+
+
+
 - Iniciando o WSL2 e Docker novamente, node já estava ok:
 
+OK:
 
 > kubectl get node
 NAME   STATUS   ROLES           AGE   VERSION
